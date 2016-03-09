@@ -1,0 +1,108 @@
+<html>
+<head>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+<style>
+	th {text-align: center;}
+</style>
+</head>
+
+
+<body align="center" style="padding-top:50px">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">SXC3409-Project 1</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="/">Home</a></li>
+    </ul>
+    <p class="navbar-text pull-right">| <a id="Sss" href="<%= path_to_asset("CSE5335Project1-Spring2016.pdf") %>">See project Requirements</a></p>
+    <p class="navbar-text pull-right">| <a href="home/ref">References</a></p>
+  </div>
+</div>
+<div class="container">	
+
+<title>CSE5335-SXC3409 </title>
+<h1>Ajax demo using Rails and JQuery!</h1>
+
+<h3>Get the list of top ten best cities to live</h3>
+
+<input type="button" class="btn btn-primary"  Value="Get List" onclick="table()">
+<br>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <table class="table table-striped table table-bordered" id="result"><br>
+        </table>
+    </div> 
+    <div class="col-md-3"></div>  
+</div>
+
+<input type="button" class="btn btn-primary" Value="Show in map" onclick="populateMap()"><br>
+<br>
+
+<div id="multi_markers" style='width: fit; height: 500px;'></div>
+
+<script type="text/javascript">
+$(doccument).ready(function (){
+    $('Sss').click(function(e) {
+    e.preventDefault();  //stop the browser from following
+    window.location.href = 'uploads/file.doc';
+});
+});
+    function table() {
+        $.get("/home/data", function(data) {
+            var table = "<tr><th>Rank</th><th>City</th></tr>";
+
+            for (var i = 0; i < data.data.length; i++) {
+                table += "<tr>";
+                table += "<td>" + data.data[i].rank + "</td>";
+                table += "<td>" + data.data[i].City + "</td>";
+                table += "</tr>";
+            }
+            $("#result").html(table);
+        });
+    }
+
+    function populateMap() {
+        var map;
+        var elevator;
+        var myOptions = {
+            zoom: 2,
+            minZoom: 2,
+            maxZoom: 13,
+
+            center: new google.maps.LatLng(0, 0),
+            mapTypeId: 'terrain'
+        };
+        map = new google.maps.Map($('#multi_markers')[0], myOptions);
+
+        $.get("/home/map", function(data) {
+            for (var i = 0; i < data.pos.length; i++) {
+                var p = data.pos[i]
+                var latlng = new google.maps.LatLng(p.lat, p.lng);
+                new google.maps.Marker({
+                    position: latlng,
+                    map: map
+
+                })
+            }
+
+        });
+    }
+</script>
+</div>
+
+</body>
+</html>
