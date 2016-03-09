@@ -22,5 +22,6 @@ module CSE5335Sxc3409
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+    # config.frameworks -= [ :active_record, :active_resource, :action_mailer]
   end
 end
