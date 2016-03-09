@@ -76,6 +76,14 @@ $(document).ready(function (){
                 table += "</tr>";
             }
             $("#result").html(table);
+            setTimeout(function() {
+                v = $("#result");
+                p = v.parent();
+                t = p.html();
+                t = "<br>" + t;
+                p.html(t);    
+            }, 200);
+            
         });
     }
 
